@@ -6,8 +6,8 @@
   margin: 0;
   padding: 0;
   font-size: 14px;
-  color: white;
   font-family: 'Inter', sans-serif;
+  color: white;
 }
 
 header{
@@ -20,6 +20,7 @@ header > img{
 
 body{
   background-color: #151515;
+  
 }
 
 section{
@@ -27,7 +28,7 @@ section{
 }
 
 header, main, footer{
-  max-width: 800px;
+  max-width: 850px;
   margin: auto;
 }
 
@@ -66,6 +67,7 @@ button{
   padding: 0 20px;
   height: 35px;
   align-self: flex-end;
+  border: none;
 }
 
 button:hover{
@@ -180,3 +182,25 @@ h2{
   flex-grow: 1;
 }
 
+@media screen and (max-width:900px){
+  .input{
+    width: 100%;
+  }
+
+  header, main, footer{
+    width: 90%;
+  }
+}
+
+@media screen and (max-width:780px){
+  .uncomplete-book-card, .completed-book-card{
+    flex-basis: 100%;
+  }
+}
+
+@media screen and (max-width:610px){
+  .counter-card{
+    flex-basis: 100%;
+    margin-bottom: 20px;
+  }
+}
