@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style/style.css">
+  <title>Bookshelf</title>
+</head>
+<body>
+  <header>
+    <img src="assets/logo.svg" alt="bookshelf-logo">
+  </header>
+  <main>
+    <section class="insert-section">
+      <h2>Insert Book</h2>
+      <form id="book-data">
+        <div class="input">
+          <label for="input-title">Title</label>
+          <input type="text" name="input-title" id="input-title">
+        </div>
+        <div class="input">
+          <label for="writer">Writer</label>
+          <input type="text" name="input-writer" id="input-writer">
+        </div>
+        <div class="input">
+          <label for="input-release-year">Release Year</label>
+          <input type="number" name="input-release-year" id="input-release-year" maxlength="4">
+        </div>
+        <div class="input-checkbox">
+          <input type="checkbox" name="input-is-complete" id="input-is-complete">
+          <label for="input-is-complete">Completed Reading</label>
+        </div>
+        <button type="submit">Insert</button>
+      </form>
+    </section>
+
+    <section class="counter-book-section">
+      <h2>Number of Books</h2>
+      <div class="counter-card">
+        <img src="assets/star.svg" alt="star-icon">
+        <div class="counter-card-text">
+          <p class="total-book">0 Books</p>
+          <p>In Shelf</p>
+        </div>
+      </div>
+      <div class="counter-card">
+        <img src="assets/check.svg" alt="check-icon">
+        <div class="counter-card-text">
+          <p class="finished-book">0 Books</p>
+          <p>Completed</p>
+        </div>
+      </div>
+      <div class="counter-card">
+        <img src="assets/cross.svg" alt="cross-icon">
+        <div class="counter-card-text">
+          <p class="unfinished-book">0 Books</p>
+          <p>Unfinished Book</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="search-section">
+      <h2>Search</h2>
+      <input type="text" name="input-search" id="input-search" placeholder="Press enter after typing a keyword"> 
+    </section>
+
+    <section class="book-shelf-section">
+      <h2>Shelf</h2>
+      <section class="uncomplete-book-card">
+        <h3>Uncomplete Book</h3>
+        <div class="book-item">
+          <img src="assets/mark-outline.png" alt="mark-outline-icon">
+          <div class="description">
+            <h4>Harry Potter Syalala Lalala</h4>
+            <p>by J.K. Rowling</p>
+            <p class="year">2001</p>
+          </div>
+          <div class="action">
+            <input type="image" src="assets/check-outline.svg" alt="check-outline-icon">
+            <input type="image" src="assets/trash-outline.svg" alt="trash-outline-icon">
+          </div>
+        </div>
+        
+      </section>
+      
+      <section class="completed-book-card">
+        <h3>Completed Book</h3>
+        
+      </div>
+    </section>
+  </main>
+</body>
+</html>
