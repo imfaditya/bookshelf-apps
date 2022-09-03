@@ -182,9 +182,16 @@ h2{
   flex-grow: 1;
 }
 
+footer{
+  padding: 20px;
+
+}
+
+/* Responsive Media Query */
 @media screen and (max-width:900px){
   .input{
     width: 100%;
+    margin-bottom: 10px;
   }
 
   header, main, footer{
@@ -195,10 +202,11 @@ h2{
 @media screen and (max-width:780px){
   .uncomplete-book-card, .completed-book-card{
     flex-basis: 100%;
+    min-height: 100px;
   }
 }
 
-@media screen and (max-width:610px){
+@media screen and (max-width:630px){
   .counter-card{
     flex-basis: 100%;
     margin-bottom: 20px;
