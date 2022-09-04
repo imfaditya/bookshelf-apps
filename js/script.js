@@ -2,11 +2,12 @@ const books = [];
 const searchResult = [];
 const BOOKS_STORAGE = 'BOOKS_STORAGE';
 const RENDER_BOOKS_EVENT = new Event('render-books');
+const RENDER_SEARCH_EVENT = new Event('render-search-result');
 
 document.addEventListener('DOMContentLoaded', function(){
   const bookDataForm = document.getElementById('book-data');
   const searchForm = document.getElementById('input-search');
-
+ 
   if(isStorageExist()){
     synchronizeData('storageToArray');
   }
@@ -24,7 +25,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
   searchForm.addEventListener('keypress', function(e){
     if(e.key === 'Enter'){
-      searchResult.splice(0, searchResult.length);
       searchItem(searchForm.value);
       e.preventDefault();
     }
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 function addBookData(bookObject){
   books.push(bookObject);
-  if(checkStorage){
+  if(checkStorage()){
     localStorage.setItem(BOOKS_STORAGE, JSON.stringify(books));
   }
   document.dispatchEvent(RENDER_BOOKS_EVENT);
@@ -95,24 +95,40 @@ document.addEventListener('render-books', function(){
   completedBooksContainer.append(titleCompleted);
   uncompleteBooksContainer.append(titleUncomplete);
 
-  if(searchResult.length === 0){
-    for (const bookItem of books) {
-      bookStructure = generateBookStructure(bookItem);
-      if(bookItem.isComplete){
-        completedBooksContainer.append(bookStructure);
-      }else{
-        uncompleteBooksContainer.append(bookStructure);
-      }
+  for (const bookItem of books) {
+    bookStructure = generateBookStructure(bookItem);
+    if(bookItem.isComplete){
+      completedBooksContainer.append(bookStructure);
+    }else{
+      uncompleteBooksContainer.append(bookStructure);
     }
-    countBooks();
-  }else{
-    for (const bookItem of searchResult) {
-      bookStructure = generateBookStructure(bookItem);
-      if(bookItem.isComplete){
-        completedBooksContainer.append(bookStructure);
-      }else{
-        uncompleteBooksContainer.append(bookStructure);
-      }
+  }
+
+  countBooks();
+})
+
+document.addEventListener('render-search-result', function(){
+  const uncompleteBooksContainer = document.querySelector('.uncomplete-book-card');
+  const completedBooksContainer = document.querySelector('.completed-book-card');
+
+  uncompleteBooksContainer.innerHTML = '';
+  completedBooksContainer.innerHTML = '';
+
+  const titleUncomplete = document.createElement('h3');
+  titleUncomplete.innerText = 'Uncomplete Books';
+
+  const titleCompleted = document.createElement('h3');
+  titleCompleted.innerText = 'Completed Books';
+
+  completedBooksContainer.append(titleCompleted);
+  uncompleteBooksContainer.append(titleUncomplete);
+
+  for (const bookItem of searchResult) {
+    bookStructure = generateBookStructure(bookItem);
+    if(bookItem.isComplete){
+      completedBooksContainer.append(bookStructure);
+    }else{
+      uncompleteBooksContainer.append(bookStructure);
     }
   }
 })
@@ -215,21 +231,40 @@ function markAsUncomplete(id){
 }
 
 function deleteItem(id){
-  for (const index in books) {
-    if(books[index].id === id){
-      books.splice(index, 1);
-      synchronizeData('arrayToStorage');
+  const popupConfirmation = document.querySelector('.popup-confirmation');
+  const optionYes = document.querySelector('.confirm-yes');
+  const optionNo = document.querySelector('.confirm-no');
+
+  popupConfirmation.classList.add('active');
+  
+  optionNo.addEventListener('click', function(){
+    popupConfirmation.classList.remove('active');
+    return; 
+  })
+  
+  optionYes.addEventListener('click', function(){
+    for (const index in books) {
+      if(books[index].id === id){
+        popupConfirmation.classList.remove('active');
+        books.splice(index, 1);
+        synchronizeData('arrayToStorage');
+        return;
+      }
     }
-  }
+    
+  })
 }
 
 function searchItem(keyword){
-  if(keyword !== ''){
+  searchResult.splice(0, searchResult.length);
+  if(keyword === ''){
+    document.dispatchEvent(RENDER_BOOKS_EVENT);
+  }else{
     for (const bookItem of books) {
       if((bookItem.title.toLowerCase()).includes(keyword.toLowerCase()) || (bookItem.author.toLowerCase()).includes(keyword.toLowerCase())){
         searchResult.push(bookItem);
       }
     }
+    document.dispatchEvent(RENDER_SEARCH_EVENT);
   }
-  document.dispatchEvent(RENDER_BOOKS_EVENT)
 }
