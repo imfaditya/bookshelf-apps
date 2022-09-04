@@ -1,10 +1,12 @@
 const books = [];
+const searchResult = [];
 const BOOKS_STORAGE = 'BOOKS_STORAGE';
 const RENDER_BOOKS_EVENT = new Event('render-books');
 
 document.addEventListener('DOMContentLoaded', function(){
   const bookDataForm = document.getElementById('book-data');
-  
+  const searchForm = document.getElementById('input-search');
+
   if(isStorageExist()){
     synchronizeData('storageToArray');
   }
@@ -15,10 +17,17 @@ document.addEventListener('DOMContentLoaded', function(){
     const inputReleaseYear = parseInt(document.getElementById('input-release-year').value);
     const inputIsComplete = document.getElementById('input-is-complete').checked;
     const bookObject = generateBookObject(inputTitle, inputWriter, inputReleaseYear, inputIsComplete);
-    
+    searchResult.splice(0, searchResult.length);
     addBookData(bookObject);
-    
     e.preventDefault();
+  })
+
+  searchForm.addEventListener('keypress', function(e){
+    if(e.key === 'Enter'){
+      searchResult.splice(0, searchResult.length);
+      searchItem(searchForm.value);
+      e.preventDefault();
+    }
   })
 })
 
@@ -41,6 +50,19 @@ function synchronizeData(direction){
   }
 
   document.dispatchEvent(RENDER_BOOKS_EVENT);
+}
+
+function countBooks(){
+  const completedBooks = (document.querySelector('.completed-book-card').querySelectorAll('.book-item')).length;
+  const uncompleteBooks = (document.querySelector('.uncomplete-book-card').querySelectorAll('.book-item')).length;
+
+  const cardCompletedBooks = document.querySelector('.completed-books');
+  const cardUncompleteBooks = document.querySelector('.uncomplete-books');
+  const cardTotalBooks = document.querySelector('.total-books');
+
+  cardCompletedBooks.innerText = completedBooks + " Books";
+  cardUncompleteBooks.innerText = uncompleteBooks + " Books";
+  cardTotalBooks.innerText = (completedBooks+uncompleteBooks) + " Books";
 }
 
 function generateBookObject(title, writer, releaseYear, isComplete){
@@ -73,12 +95,24 @@ document.addEventListener('render-books', function(){
   completedBooksContainer.append(titleCompleted);
   uncompleteBooksContainer.append(titleUncomplete);
 
-  for (const bookItem of books) {
-    bookStructure = generateBookStructure(bookItem);
-    if(bookItem.isComplete){
-      completedBooksContainer.append(bookStructure);
-    }else{
-      uncompleteBooksContainer.append(bookStructure);
+  if(searchResult.length === 0){
+    for (const bookItem of books) {
+      bookStructure = generateBookStructure(bookItem);
+      if(bookItem.isComplete){
+        completedBooksContainer.append(bookStructure);
+      }else{
+        uncompleteBooksContainer.append(bookStructure);
+      }
+    }
+    countBooks();
+  }else{
+    for (const bookItem of searchResult) {
+      bookStructure = generateBookStructure(bookItem);
+      if(bookItem.isComplete){
+        completedBooksContainer.append(bookStructure);
+      }else{
+        uncompleteBooksContainer.append(bookStructure);
+      }
     }
   }
 })
@@ -126,6 +160,10 @@ function generateBookStructure(bookObject){
   trashButton.setAttribute('type', 'image');
   trashButton.setAttribute('src', 'assets/trash-outline.svg');
 
+  trashButton.addEventListener('click', function(){
+    deleteItem(bookObject.id);
+  })
+
   const actionWrapper = document.createElement('div');
   actionWrapper.classList.add('action');
 
@@ -163,7 +201,6 @@ function markAsComplete(id){
     if(bookItem.id === id){
       bookItem.isComplete = true;
       synchronizeData('arrayToStorage');
-      document.dispatchEvent(RENDER_BOOKS_EVENT);
     }
   }
 }
@@ -173,12 +210,26 @@ function markAsUncomplete(id){
     if(bookItem.id === id){
       bookItem.isComplete = false;
       synchronizeData('arrayToStorage');
-      document.dispatchEvent(RENDER_BOOKS_EVENT);
     }
   }
 }
 
-function deleteItem(){
-
+function deleteItem(id){
+  for (const index in books) {
+    if(books[index].id === id){
+      books.splice(index, 1);
+      synchronizeData('arrayToStorage');
+    }
+  }
 }
 
+function searchItem(keyword){
+  if(keyword !== ''){
+    for (const bookItem of books) {
+      if((bookItem.title.toLowerCase()).includes(keyword.toLowerCase()) || (bookItem.author.toLowerCase()).includes(keyword.toLowerCase())){
+        searchResult.push(bookItem);
+      }
+    }
+  }
+  document.dispatchEvent(RENDER_BOOKS_EVENT)
+}

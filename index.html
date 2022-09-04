@@ -17,15 +17,15 @@
       <form id="book-data">
         <div class="input">
           <label for="input-title">Title</label>
-          <input type="text" name="input-title" id="input-title">
+          <input type="text" name="input-title" id="input-title" required>
         </div>
         <div class="input">
           <label for="writer">Writer</label>
-          <input type="text" name="input-writer" id="input-writer">
+          <input type="text" name="input-writer" id="input-writer" required>
         </div>
         <div class="input">
           <label for="input-release-year">Release Year</label>
-          <input type="number" name="input-release-year" id="input-release-year" maxlength="4">
+          <input type="number" name="input-release-year" id="input-release-year" maxlength="4" required>
         </div>
         <div class="input-checkbox">
           <input type="checkbox" name="input-is-complete" id="input-is-complete">
@@ -40,22 +40,22 @@
       <div class="counter-card">
         <img src="assets/star.svg" alt="star-icon">
         <div class="counter-card-text">
-          <p class="total-book">0 Books</p>
+          <p class="total-books">0 Books</p>
           <p>In Shelf</p>
         </div>
       </div>
       <div class="counter-card">
         <img src="assets/check.svg" alt="check-icon">
         <div class="counter-card-text">
-          <p class="finished-book">0 Books</p>
+          <p class="completed-books">0 Books</p>
           <p>Completed</p>
         </div>
       </div>
       <div class="counter-card">
         <img src="assets/cross.svg" alt="cross-icon">
         <div class="counter-card-text">
-          <p class="unfinished-book">0 Books</p>
-          <p>Unfinished Book</p>
+          <p class="uncomplete-books">0 Books</p>
+          <p>Uncomplete</p>
         </div>
       </div>
     </section>
