@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const inputReleaseYear = parseInt(document.getElementById('input-release-year').value);
     const inputIsComplete = document.getElementById('input-is-complete').checked;
     const bookObject = generateBookObject(inputTitle, inputWriter, inputReleaseYear, inputIsComplete);
-    searchResult.splice(0, searchResult.length);
+    
     addBookData(bookObject);
     e.preventDefault();
   })
@@ -250,13 +250,15 @@ function deleteItem(id){
         synchronizeData('arrayToStorage');
         return;
       }
-    }
-    
+    }  
   })
 }
 
 function searchItem(keyword){
-  searchResult.splice(0, searchResult.length);
+  if(searchResult.length !== 0){
+    searchResult.splice(0, searchResult.length);
+  }
+  
   if(keyword === ''){
     document.dispatchEvent(RENDER_BOOKS_EVENT);
   }else{
